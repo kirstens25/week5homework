@@ -8,40 +8,30 @@ const schedule = $('#schedule-container');
 function makeTimeRow(timeHour) {
 const timeLabel = timeHour + ':00';
 
-// <div class="row">
-// <div id="time" class="col-2"></div>
-// <div id="notes" class="col-8">
-// <input>Notes to go here</input>
-
-// </div>
-//       <div id="save" class="col-2">
-//   <button class="btn btn-primary">Save</button>
-// </div>
-// </div>
-
 const row = $("<div>").attr('class', 'row border');
 const timeCol = $("<div>").attr('class', 'col-2').text(timeLabel);
-
+console.log('2012')
 row.append(timeCol);
 
 
-const detailsCol = $("<div>").attr('class', 'col-8')
-const details = $("<div>").attr('type', 'text').text
+const detailsCol = $("<div>").attr('class','col-8');
+const details = $("<textarea>").attr('type', 'text');
 
 detailsCol.append(details);
 row.append(detailsCol);
 
-const buttonCol = $("<div>").attr('class', 'col-2');
-const saveButton = $("<button>").attr('class', 'btn btn-primary')
+const buttonCol = $("<div>").attr('class','col-2');
+const saveButton = $("<button>").attr('class', 'btn btn-primary').text('Save');
 
 buttonCol.append(saveButton);
-row.append(saveButton);
+row.append(buttonCol);
+
+return row;
 }
 
 for (let timeHour = 9; timeHour < 18; timeHour++) {
-    makeTimeRow();
-    
-    
+    const row = makeTimeRow(timeHour);
+    schedule.append(row);
 }
 
 // user can add text to the details section
