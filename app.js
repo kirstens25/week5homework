@@ -1,16 +1,13 @@
 const schedule = $('.schedule-container');
-const todaysDate = $('todays-date');
+const todaysDate = $('#todays-date');
 
-// when screen loads
+// show accurate date
+var today = moment();
+$(todaysDate).text(today.format("dddd, DD MMMM YYYY"));
 
-// show accurate time
 
-function showTodaysDate() {
-    todaysDate.text(moment().format("MMM Do YY"));
-}
-showTodaysDate();
 
-// show 8 rows (9:00 - 17:00), with 3 columns - time, details (text field), save button
+// show row with 3 columns - time, details (text field), save button
 // user can add text to the details section
 function makeTimeRow(timeHour) {
     const timeLabel = timeHour + ':00';
@@ -21,15 +18,7 @@ function makeTimeRow(timeHour) {
 
     const detailsCol = $("<div>").attr('class', 'col-10');
     const details = $("<textarea>").attr('type', 'text').attr('class', 'text-details').attr('id', `${timeHour}ta`);
-    // if there is an existing value saved in the local storage, show it
     
-    const savedValue = getNote(timeHour);
-    if (savedValue) {
-        details.val(savedValue);
-        console.log('hello123')
-    }
-
-
     detailsCol.append(details);
     row.append(detailsCol);
 
@@ -39,9 +28,16 @@ function makeTimeRow(timeHour) {
     buttonCol.append(saveButton);
     row.append(buttonCol);
 
+    // if there is an existing value saved in the local storage, show it
+    const savedValue = getNote(timeHour);
+    if (savedValue) {
+        details.val(savedValue); 
+    }
+
     return row;
 }
 
+// create rows for each hour between 9am and 5pm (24 hour time)
 for (let timeHour = 9; timeHour < 18; timeHour++) {
     const row = makeTimeRow(timeHour);
     schedule.append(row);
@@ -50,8 +46,6 @@ for (let timeHour = 9; timeHour < 18; timeHour++) {
 }
 
 // when user clicks on the save button, save time + details to the local storage
-
-
 function saveDetails(timeHour, details) {
     localStorage.setItem(timeHour, details)
 }
@@ -61,21 +55,18 @@ $("button").on('click', document, function (event) {
     const timeHour = $(event.currentTarget).attr('id');
     const textAreaInput = $(`#${timeHour}ta`).val();
 
-    console.log(timeHour);
-
     saveDetails(timeHour, textAreaInput);
-    console.log(timeHour, '--', textAreaInput);
 })
 
+// when there is a value saved in the local storage, show it
 function getNote(timeHour) {
-    const timeLabel = timeHour + ':00'
-    return localStorage.getItem(timeLabel)
+    return localStorage.getItem(timeHour)
 }
-
 getNote();
 
-// when the it's currently that time, make the background light green
-// when the time hasn't been reached yet, make the background light blue
+// when the time hasn't been reached yet, make the background grey
+// when the it's currently that time, make the background to red
+// when the time hasn't been reached yet, make the background green
 
 setBackgroundColor();
 
@@ -92,7 +83,6 @@ function setBackgroundColor(timeHour) {
     else {
         $(`#${timeHour}row`).addClass("future")
     }
-    console.log('timeHour', timeHour, 'currentHour', currentHour)
 }
 
 
